@@ -22,7 +22,7 @@ class Boat < Actor
                     [ 5, 15], [ 5,-15]]
   }
 
-  attr_reader :turning_left, :turning_right
+  attr_accessor :turning_left, :turning_right
 
   def setup
     self.action = :idle
@@ -35,12 +35,9 @@ class Boat < Actor
     @turning_right = false
 
     i = input_manager
+    i.while_key_pressed( :left,  self, :turning_left  )
+    i.while_key_pressed( :right, self, :turning_right )
 
-    i.reg( KeyPressed,  :left  ){  @turning_left  = true   }
-    i.reg( KeyReleased, :left  ){  @turning_left  = false  }
-
-    i.reg( KeyPressed,  :right ){  @turning_right = true   }
-    i.reg( KeyReleased, :right ){  @turning_right = false  }
   end
 
 
