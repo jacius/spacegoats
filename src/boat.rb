@@ -44,9 +44,18 @@ class Boat < Actor
 
 
   def update( time_ms )
-
     seconds = time_ms * 0.001
 
+    calc_rotation( seconds )
+    calc_force( seconds )
+
+    super
+  end
+
+
+  private
+
+  def calc_rotation( seconds )
     turn = 0
     turn -= 1 if @turning_left
     turn += 1 if @turning_right
@@ -56,14 +65,15 @@ class Boat < Actor
     else
       body.w *= @turn_decay ** seconds
     end
+  end
 
+
+  def calc_force( seconds )
     body.reset_forces
 
     # TODO: calculate from the wind
     push = 500
     body.f = vec2(1,0).rotate(body.rot) * push
-
-    super
   end
 
 end
