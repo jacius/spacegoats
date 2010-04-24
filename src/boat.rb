@@ -27,7 +27,8 @@ class Boat < Actor
   def setup
     self.action = :idle
 
-    @turn_rate = 5
+    @turn_max   = 5
+    @turn_accel = 0.2 + 1
     @turn_decay = 0.2
 
     @turning_left  = false
@@ -61,7 +62,11 @@ class Boat < Actor
     turn += 1 if @turning_right
 
     if turn != 0
-      body.w = @turn_rate * turn
+      if body.w.abs < @turn_max
+        body.w += turn * @turn_accel ** seconds
+      else
+        body.w = turn * @turn_max 
+      end
     else
       body.w *= @turn_decay ** seconds
     end
