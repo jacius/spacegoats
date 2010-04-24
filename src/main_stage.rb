@@ -1,21 +1,21 @@
-require 'stage'
+require 'physical_stage'
 
-class MainStage < Stage
+class MainStage < PhysicalStage
+
   def setup
     super
-    @my_actor = create_actor :my_actor
-    @my_actor.x = 10
-    @my_actor.y = 10
 
-    @stars = []
-    20.times { @stars << Ftor.new(rand(viewport.width),rand(viewport.height)) }
+    @boat = create_actor :boat
+    @boat.warp( vec2(50,50) )
+    @boat.body.v = vec2(0,50)
+
+    @water_color = Rubygame::Color::ColorHSL.new([0.56, 0.8, 0.2])
+
   end
 
   def draw(target)
-    target.fill [25,25,25,255]
-    for star in @stars
-      target.draw_circle_s([star.x,star.y],1,[255,255,255,255])
-    end
+    target.fill @water_color
     super
   end
+
 end

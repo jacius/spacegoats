@@ -2,6 +2,4 @@
 :sound: true
 :auto_quit: :escape
 :fullscreen: false
-:screen_resolution: 
-- 1024
-- 800
+:screen_resolution: [640, 480]
