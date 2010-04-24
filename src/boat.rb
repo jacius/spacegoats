@@ -15,7 +15,7 @@ class Boat < Actor
 
   has_behaviors :physical => {
     :shape      => :poly, 
-    :mass       => 200,
+    :mass       => 20,
     :friction   => 0.4,
     :elasticity => 0.2,
     :verts      => [[-5,-15], [-5, 15],
@@ -52,10 +52,16 @@ class Boat < Actor
     turn += 1 if @turning_right
 
     if turn != 0
-      physical.body.w = @turn_rate * turn
+      body.w = @turn_rate * turn
     else
-      physical.body.w *= @turn_decay ** seconds
+      body.w *= @turn_decay ** seconds
     end
+
+    body.reset_forces
+
+    # TODO: calculate from the wind
+    push = 500
+    body.f = vec2(1,0).rotate(body.rot) * push
 
     super
   end
