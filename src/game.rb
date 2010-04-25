@@ -4,6 +4,7 @@ class Game
               :sound_manager, :stage_manager
 
   def setup
+    @input_manager.framerate = 50
     @stage_manager.change_stage_to :main
   end
 
