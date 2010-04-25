@@ -1,2 +1,5 @@
 :stages: 
   - :main:
+      :boat:
+        :x:        320
+        :y:        240
