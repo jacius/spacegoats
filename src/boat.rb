@@ -28,9 +28,11 @@ class Boat < Actor
   def setup
     self.action = :idle
 
-    @turn_max   = 5             # max turn rate
-    @turn_accel = 1.2           # acceleration when turning
+    @turn_max   = 0.5           # max turn rate
+    @turn_accel = 0.3           # acceleration when turning
     @turn_decay = 0.2           # spin slowdown when not turning (0 - 1)
+    @turn_still = 0.2           # how well you can turn when not moving
+    @turn_mod   = 1.2           # turnability modifier
 
     @spd_max    = 30            # max boat speed
     @spd_back   = 10            # max speed when motoring backwards
@@ -39,8 +41,7 @@ class Boat < Actor
 
     # Tendency of the boat to change its movement vector to be in line
     # with the way it's pointing. (0 - 1)
-    @dir_adjust = 0.8
-
+    @dir_adjust = 0.7
 
     @turning_left  = false
     @turning_right = false
@@ -75,11 +76,15 @@ class Boat < Actor
     turn -= 1 if @turning_left
     turn += 1 if @turning_right
 
+    # You can turn a boat better when it's moving.
+    turnability = [@turn_still, body.v.length / @spd_max].max
+    effective_max = @turn_max * turnability * @turn_mod
+
     if turn != 0
-      if body.w.abs < @turn_max
+      if body.w.abs < effective_max
         body.w += turn * @turn_accel ** seconds
       else
-        body.w = turn * @turn_max 
+        body.w = turn * effective_max
       end
     else
       body.w *= @turn_decay ** seconds
