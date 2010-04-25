@@ -15,11 +15,11 @@ class Boat < Actor
 
   has_behaviors :physical => {
     :shape      => :poly, 
-    :mass       => 20,
-    :friction   => 0.4,
-    :elasticity => 0.2,
-    :verts      => [[-15,-5], [-16, 0], [-15, 5],
-                    [ 15, 5], [ 16, 0], [ 15,-5]]
+    :mass       => 50,
+    :friction   => 0.6,
+    :elasticity => 0.1,
+    :verts      => [[-14,-6], [-15, 0], [-14, 6],
+                    [ 13, 4], [ 15, 0], [ 13,-4]]
   }
 
   attr_accessor :turning_left,  :turning_right,
@@ -41,11 +41,11 @@ class Boat < Actor
     @spd_max    = 20            # max boat speed
     @spd_back   = 10            # max speed when motoring backwards
     @spd_accel  = 10            # acceleration when motoring
-    @spd_decay  = 0.98          # slowdown when not motoring (0 - 1)
+    @spd_decay  = 0.94          # slowdown when not motoring (0 - 1)
 
     # Tendency of the boat to change its movement vector to be in line
     # with the way it's pointing. (0 - 1)
-    @dir_adjust = 0.7
+    @dir_adjust = 0.4
 
     @turning_left  = false
     @turning_right = false
