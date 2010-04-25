@@ -3,3 +3,11 @@
       :boat:
         :x:        320
         :y:        240
+      :wind:
+        :dir:      -25
+        :var_dir:    5
+        :spd:        6
+        :var_spd:    2
+        :flux:     0.5
+
+

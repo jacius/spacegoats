@@ -1,4 +1,5 @@
 require 'physical_stage'
+require 'wind'
 
 class MainStage < PhysicalStage
 
@@ -6,6 +7,9 @@ class MainStage < PhysicalStage
     super
 
     @boat = create_actor( :boat, opts[:boat] || {} )
+
+    # Not really used
+    @wind = Wind.new( opts[:wind] || {} )
 
     @water_color = Rubygame::Color::ColorHSL.new([0.56, 0.8, 0.2])
 
