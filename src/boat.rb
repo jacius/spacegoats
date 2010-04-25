@@ -28,6 +28,10 @@ class Boat < Actor
   def setup
     self.action = :idle
 
+    if opts[:angle]
+      body.a = opts[:angle] * Math::PI/180.0
+    end
+
     @turn_max   = 0.5           # max turn rate
     @turn_accel = 0.3           # acceleration when turning
     @turn_decay = 0.2           # spin slowdown when not turning (0 - 1)
