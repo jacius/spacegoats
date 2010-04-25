@@ -18,8 +18,8 @@ class Boat < Actor
     :mass       => 20,
     :friction   => 0.4,
     :elasticity => 0.2,
-    :verts      => [[-5,-15], [-5, 15],
-                    [ 5, 15], [ 5,-15]]
+    :verts      => [[-15,-5], [-16, 0], [-15, 5],
+                    [ 15, 5], [ 16, 0], [ 15,-5]]
   }
 
   attr_accessor :turning_left,  :turning_right,
@@ -32,9 +32,9 @@ class Boat < Actor
     @turn_accel = 0.3           # acceleration when turning
     @turn_decay = 0.2           # spin slowdown when not turning (0 - 1)
     @turn_still = 0.2           # how well you can turn when not moving
-    @turn_mod   = 1.2           # turnability modifier
+    @turn_mod   = 0.9           # turnability modifier
 
-    @spd_max    = 30            # max boat speed
+    @spd_max    = 20            # max boat speed
     @spd_back   = 10            # max speed when motoring backwards
     @spd_accel  = 10            # acceleration when motoring
     @spd_decay  = 0.98          # slowdown when not motoring (0 - 1)
