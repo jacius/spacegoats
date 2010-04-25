@@ -37,6 +37,11 @@ class Boat < Actor
     @spd_accel  = 10            # acceleration when motoring
     @spd_decay  = 0.98          # slowdown when not motoring (0 - 1)
 
+    # Tendency of the boat to change its movement vector to be in line
+    # with the way it's pointing. (0 - 1)
+    @dir_adjust = 0.8
+
+
     @turning_left  = false
     @turning_right = false
     @motor_fore    = false
@@ -55,6 +60,7 @@ class Boat < Actor
     seconds = time_ms * 0.001
 
     calc_rotation( seconds )
+    adjust_movement( seconds )
     calc_force( seconds )
 
     super
@@ -62,6 +68,7 @@ class Boat < Actor
 
 
   private
+
 
   def calc_rotation( seconds )
     turn = 0
@@ -77,6 +84,21 @@ class Boat < Actor
     else
       body.w *= @turn_decay ** seconds
     end
+  end
+
+
+  # Adjust movement vector to be more in line with boat's axis.
+  # Because boats tend not to move sideways.
+  def adjust_movement( seconds )
+    dir = vec2(1,0).rotate(body.rot)
+
+    # Ideal movement (correct direction, same speed as now)
+    ideal = dir * body.v.length
+
+    # How much of the old vector to keep
+    blend = @dir_adjust ** seconds
+
+    body.v = body.v * (1 - blend) + ideal * blend
   end
 
 
@@ -100,7 +122,6 @@ class Boat < Actor
     if body.v.length < @spd_max
       body.v *= @spd_decay ** seconds
     end
-
   end
 
 end
