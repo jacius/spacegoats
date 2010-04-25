@@ -47,13 +47,6 @@ class Boat < Actor
     @turning_right = false
     @motor_fore    = false
     @motor_back    = false
-
-    i = input_manager
-    i.while_key_pressed( :left,  self, :turning_left  )
-    i.while_key_pressed( :right, self, :turning_right )
-    i.while_key_pressed( :up,    self, :motor_fore    )
-    i.while_key_pressed( :down,  self, :motor_back    )
-
   end
 
 

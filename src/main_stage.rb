@@ -8,6 +8,13 @@ class MainStage < PhysicalStage
 
     @boat = create_actor( :boat, opts[:boat] || {} )
 
+    i = input_manager
+    i.while_key_pressed( :left,  @boat, :turning_left  )
+    i.while_key_pressed( :right, @boat, :turning_right )
+    i.while_key_pressed( :up,    @boat, :motor_fore    )
+    i.while_key_pressed( :down,  @boat, :motor_back    )
+
+
     # Not really used
     @wind = Wind.new( opts[:wind] || {} )
 
