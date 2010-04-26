@@ -6,6 +6,13 @@ class MainStage < PhysicalStage
   def setup
     super
 
+    (opts[:goats] || 20).times do
+      x = rand(viewport.width  - 40) + 20
+      y = rand(viewport.height - 40) + 20
+      create_actor :goat, :x => x, :y => y
+    end
+
+
     @boat = create_actor( :boat, opts[:boat] || {} )
 
     i = input_manager
