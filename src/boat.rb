@@ -15,11 +15,11 @@ class Boat < Actor
 
   has_behaviors :physical => {
     :shape      => :poly, 
-    :mass       => 50,
-    :friction   => 0.6,
-    :elasticity => 0.1,
-    :verts      => [[-14,-6], [-15, 0], [-14, 6],
-                    [ 13, 4], [ 15, 0], [ 13,-4]]
+    :mass       => 40,
+    :friction   => 0.5,
+    :elasticity => 0.2,
+    :verts      => [[-14,-7], [-15, 0], [-14, 7], [0, 6],
+                    [ 11, 4], [ 14, 0], [ 11,-4], [0,-6]]
   }
 
   attr_accessor :turning_left,  :turning_right,
@@ -32,20 +32,20 @@ class Boat < Actor
       body.a = opts[:angle] * Math::PI/180.0
     end
 
-    @turn_max   = 0.5           # max turn rate
-    @turn_accel = 0.3           # acceleration when turning
+    @turn_max   = 0.8           # max turn rate
+    @turn_accel = 0.8           # acceleration when turning
     @turn_decay = 0.2           # spin slowdown when not turning (0 - 1)
-    @turn_still = 0.2           # how well you can turn when not moving
-    @turn_mod   = 0.9           # turnability modifier
+    @turn_still = 0.4           # how well you can turn when not moving
+    @turn_mod   = 1.3           # turnability modifier
 
-    @spd_max    = 20            # max boat speed
-    @spd_back   = 10            # max speed when motoring backwards
-    @spd_accel  = 10            # acceleration when motoring
-    @spd_decay  = 0.94          # slowdown when not motoring (0 - 1)
+    @spd_max    = 95            # max boat speed
+    @spd_accel  = 30            # acceleration when motoring forwards
+    @spd_back   = 15            # acceleration when motoring backwards
+    @spd_decay  = 0.92          # slowdown when not motoring (0 - 1)
 
     # Tendency of the boat to change its movement vector to be in line
     # with the way it's pointing. (0 - 1)
-    @dir_adjust = 0.4
+    @dir_adjust = 0.2
 
     @turning_left  = false
     @turning_right = false
@@ -56,6 +56,8 @@ class Boat < Actor
 
   def update( time_ms )
     seconds = time_ms * 0.001
+
+    body.reset_forces
 
     calc_rotation( seconds )
     adjust_movement( seconds )
@@ -79,9 +81,7 @@ class Boat < Actor
 
     if turn != 0
       if body.w.abs < effective_max
-        body.w += turn * @turn_accel ** seconds
-      else
-        body.w = turn * effective_max
+        body.t = turn * @turn_accel * body.m * 1000
       end
     else
       body.w *= @turn_decay ** seconds
@@ -109,19 +109,20 @@ class Boat < Actor
 
     dir = vec2(1,0).rotate(body.rot)
 
-    body.reset_forces
-
-    case motor
-    when 1                      # forward
-      body.f = dir * motor * @spd_max * body.m
-    when -1                     #  backward
-      body.f = dir * motor * @spd_back * body.m
-    else                        # drifting
-      body.v *= @spd_decay ** seconds
-    end
-
-    # Slow down if going too fast
     if body.v.length < @spd_max
+      case motor
+      when 1
+        # motoring forward
+        body.f = dir * motor * @spd_accel * body.m
+      when -1
+        # motoring backward
+        body.f = dir * motor * @spd_accel * body.m
+      else
+        # idling
+        body.v *= @spd_decay ** seconds
+      end
+    else
+      # Slow down if going too fast
       body.v *= @spd_decay ** seconds
     end
   end
