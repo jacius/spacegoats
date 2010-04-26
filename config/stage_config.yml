@@ -3,6 +3,7 @@
       :boat:
         :x:        320
         :y:        240
+        :angle:   -145
       :wind:
         :dir:      -25
         :var_dir:    5
